@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyPro | FocusFlow Study Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --royal-blue: #4169E1;
+            --dark-blue: #2B4492;
+            --off-white: #f8fafc;
+        }
+        /* 90% Royal Blue Theme */
+        body {
+            background-color: var(--royal-blue);
+            color: white;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+        .bg-royal-blue { background-color: var(--royal-blue); }
+        .text-royal-blue { color: var(--royal-blue); }
+        .border-royal-blue { border-color: var(--royal-blue); }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-white {
+            background-color: white;
+            color: var(--royal-blue);
+            transition: all 0.3s ease;
+        }
+        .btn-white:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            font-size: 6rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid white;
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Focus mode overlay */
+        .focus-mode-active {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 9999;
+            background: var(--royal-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- LANDING PAGE SECTION -->
+    <div id="landing-page" class="fade-in relative">
+        
+        <!-- Top Corner Navigation -->
+        <nav class="absolute top-0 w-full py-6 px-4 md:px-8 flex justify-between items-center z-50">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 flex items-center justify-center cursor-pointer">
+                    <!-- Clean white SVG logo for the corner -->
+                    <svg width="100%" height="100%" viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Graduation Cap -->
+                        <path d="M120 10 L40 50 L120 90 L200 50 Z" fill="white" />
+                        <path d="M60 60 V95 C60 95 120 115 180 95 V60" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" />
+                        <circle cx="195" cy="100" r="6" fill="white" />
+                        <rect x="192" y="50" width="6" height="50" fill="white" />
+                        <!-- Open Book -->
+                        <path d="M120 100 C100 95 40 95 20 110 V150 C40 135 100 135 120 140 C140 135 200 135 220 150 V110 C200 95 140 95 120 100 Z" fill="transparent" stroke="white" stroke-width="8" />
+                    </svg>
+                </div>
+                <span class="text-2xl font-black tracking-tighter text-white hidden sm:block">STUDYPRO</span>
+            </div>
+            <button onclick="startApp()" class="btn-white px-6 py-2 rounded-full font-bold text-sm shadow-lg">Login</button>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="pt-32 pb-32 px-4 text-center">
+            <div class="max-w-4xl mx-auto">
+                <!-- StudyPro Logo SVG -->
+                <div class="flex justify-center mb-8">
+                    <div class="p-6">
+                        <svg width="220" height="160" viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Graduation Cap -->
+                            <path d="M120 10 L40 50 L120 90 L200 50 Z" fill="white" />
+                            <path d="M60 60 V95 C60 95 120 115 180 95 V60" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" />
+                            <circle cx="195" cy="100" r="6" fill="white" />
+                            <rect x="192" y="50" width="6" height="50" fill="white" />
+                            <!-- Sparkles -->
+                            <path d="M120 0 L123 7 L130 10 L123 13 L120 20 L117 13 L110 10 L117 7 Z" fill="#cbd5e1" />
+                            <!-- Open Book -->
+                            <path d="M120 100 C100 95 40 95 20 110 V150 C40 135 100 135 120 140 C140 135 200 135 220 150 V110 C200 95 140 95 120 100 Z" fill="#2B4492" stroke="white" stroke-width="4" />
+                            <line x1="120" y1="100" x2="120" y2="140" stroke="white" stroke-width="4" />
+                            <!-- Text -->
+                            <text x="120" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="32" fill="white">StudyPro</text>
+                            <text x="120" y="178" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#cbd5e1" letter-spacing="1">STUDY SMARTER, REACH HIGHER</text>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">The Future of Focus</h1>
+                <p class="text-xl opacity-80 mb-10 max-w-2xl mx-auto font-light">Join thousands of students worldwide using StudyPro to eliminate distractions and master their curriculum.</p>
+                <button onclick="startApp()" class="btn-white px-12 py-5 rounded-full font-bold text-xl shadow-2xl">Get Started - It's Free</button>
+            </div>
+        </header>
+
+        <!-- Social Proof (White on Blue) -->
+        <section class="max-w-6xl mx-auto px-4">
+            <div class="card p-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <p class="text-4xl font-black mb-1">50k+</p>
+                    <p class="opacity-60 text-sm uppercase tracking-widest">Active Users</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black mb-1">4.9/5</p>
+                    <p class="opacity-60 text-sm uppercase tracking-widest">Global Rating</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black mb-1">120m</p>
+                    <p class="opacity-60 text-sm uppercase tracking-widest">Minutes Logged</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black mb-1">92%</p>
+                    <p class="opacity-60 text-sm uppercase tracking-widest">Success Rate</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem / Pain -->
+        <section class="py-32 px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-blue-300 font-bold uppercase tracking-widest text-xs mb-4">The Solution to Procrastination</h2>
+                <p class="text-4xl font-bold leading-tight mb-8">Stop fighting your brain. Start working with it.</p>
+                <p class="text-lg opacity-70">Traditional studying is broken. StudyPro creates a high-intensity focus environment that locks out distractions and keeps you in the "flow state" longer.</p>
+            </div>
+        </section>
+
+        <!-- How It Works (Steps) -->
+        <section class="py-24 px-4">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+                <div class="card p-8 text-center border-none bg-white/10">
+                    <div class="w-12 h-12 bg-white text-royal-blue rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">1</div>
+                    <h3 class="text-2xl font-bold mb-4">Organize</h3>
+                    <p class="opacity-70">Add your classes and current assignments to your clean, central dashboard.</p>
+                </div>
+                <div class="card p-8 text-center border-none bg-white/10">
+                    <div class="w-12 h-12 bg-white text-royal-blue rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">2</div>
+                    <h3 class="text-2xl font-bold mb-4">Execute</h3>
+                    <p class="opacity-70">Launch the Deep Work timer and ambient audio to enter the zone instantly.</p>
+                </div>
+                <div class="card p-8 text-center border-none bg-white/10">
+                    <div class="w-12 h-12 bg-white text-royal-blue rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">3</div>
+                    <h3 class="text-2xl font-bold mb-4">Recall</h3>
+                    <p class="opacity-70">Use automated flashcards to lock in knowledge before you close the app.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing / Subscription Plans -->
+        <section class="py-24 px-4 bg-white/5 border-t border-b border-white/10">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-blue-300 font-bold uppercase tracking-widest text-xs mb-4">Pricing Plans</h2>
+                    <h3 class="text-4xl font-bold">Invest in your focus</h3>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
+                    <!-- Free Tier -->
+                    <div class="card p-8 text-center border-none bg-white/5">
+                        <h4 class="text-xl font-bold mb-2">Free</h4>
+                        <p class="text-4xl font-black mb-6">$0<span class="text-lg opacity-50 font-normal">/mo</span></p>
+                        <ul class="text-left space-y-4 mb-8 opacity-80 text-sm">
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Focus Timer</li>
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Basic Task Manager</li>
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Up to 3 Subjects</li>
+                        </ul>
+                        <button onclick="startApp()" class="w-full py-3 rounded-lg border border-white/20 hover:bg-white/10 transition font-bold">Start Free</button>
+                    </div>
+                    
+                    <!-- Standard Tier (Highlighted) -->
+                    <div class="card p-8 text-center bg-white text-royal-blue transform md:-translate-y-4 shadow-2xl relative border-none">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#2B4492] text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Recommended</div>
+                        <h4 class="text-xl font-bold mb-2">Standard</h4>
+                        <p class="text-4xl font-black mb-6">$4.99<span class="text-lg opacity-50 font-normal">/mo</span></p>
+                        <ul class="text-left space-y-4 mb-8 font-medium text-sm">
+                            <li><span class="text-royal-blue font-bold mr-2">✓</span> Unlimited Subjects</li>
+                            <li><span class="text-royal-blue font-bold mr-2">✓</span> Advanced Flashcards</li>
+                            <li><span class="text-royal-blue font-bold mr-2">✓</span> Study Analytics</li>
+                        </ul>
+                        <button onclick="startApp()" class="w-full py-3 rounded-lg bg-royal-blue text-white hover:bg-blue-700 transition font-bold shadow-lg">Upgrade to Standard</button>
+                    </div>
+                    
+                    <!-- Premium Tier -->
+                    <div class="card p-8 text-center border-none bg-white/5">
+                        <h4 class="text-xl font-bold mb-2">Premium</h4>
+                        <p class="text-4xl font-black mb-6">$14.99<span class="text-lg opacity-50 font-normal">/mo</span></p>
+                        <ul class="text-left space-y-4 mb-8 opacity-80 text-sm">
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Everything in Standard</li>
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Custom Ambient Audio</li>
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Shared Flashcard Decks</li>
+                            <li><span class="text-green-400 font-bold mr-2">✓</span> Priority Support</li>
+                        </ul>
+                        <button class="w-full py-3 rounded-lg border border-white/20 hover:bg-white/10 transition font-bold">Upgrade to Premium</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="py-32 text-center">
+            <h2 class="text-4xl font-bold mb-8">Ready to reach higher?</h2>
+            <button onclick="startApp()" class="btn-white px-10 py-4 rounded-full font-bold text-lg shadow-xl">Launch Your First Session</button>
+        </section>
+
+        <footer class="py-12 opacity-40 text-center text-xs">
+            &copy; 2026 STUDYPRO FOUNDATION. ALL RIGHTS RESERVED.
+        </footer>
+    </div>
+
+
+    <!-- APP INTERFACE SECTION -->
+    <div id="app-interface" class="hidden fade-in min-h-screen">
+        <!-- Navigation -->
+        <nav class="border-b border-white/10 py-4 px-6 mb-8">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                        <svg class="text-royal-blue w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 4.804A7.993 7.993 0 002 12a7.998 7.998 0 017-7.196V4.804z"></path><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11.414V14a1 1 0 11-2 0V6.586l-2.293 2.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 6.586z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter">STUDYPRO</span>
+                </div>
+                <div class="flex gap-6">
+                    <button onclick="switchTab('dashboard')" class="nav-link tab-active py-2">Tasks</button>
+                    <button onclick="switchTab('timer')" class="nav-link py-2 opacity-60 hover:opacity-100 transition">Timer</button>
+                    <button onclick="switchTab('tools')" class="nav-link py-2 opacity-60 hover:opacity-100 transition">Tools</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto px-6">
+            
+            <!-- TASKS TAB -->
+            <section id="dashboard" class="tab-content grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-1">
+                    <div class="card p-6">
+                        <h2 class="font-bold mb-4 flex items-center gap-2">Subjects</h2>
+                        <div id="subject-list" class="space-y-2 mb-6"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="subject-input" placeholder="New subject..." class="flex-1 rounded-lg px-3 py-2 text-sm outline-none">
+                            <button onclick="addSubject()" class="bg-white text-royal-blue px-3 rounded-lg font-bold hover:bg-blue-50">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <div class="card p-6">
+                        <h2 class="font-bold mb-4">Today's Assignments</h2>
+                        <div id="task-list" class="space-y-3 mb-6"></div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <input type="text" id="task-input" placeholder="What needs doing?" class="col-span-2 rounded-lg px-4 py-3 outline-none">
+                            <button onclick="addTask()" class="btn-white rounded-lg font-bold">Add Task</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TIMER TAB -->
+            <section id="timer" class="tab-content hidden text-center py-12">
+                <div id="timer-container" class="card max-w-2xl mx-auto p-16 transition-all duration-700">
+                    <p id="timer-label" class="uppercase tracking-widest opacity-50 mb-4">Focus Session</p>
+                    <div id="timer-display" class="timer-display mb-12">25:00</div>
+                    
+                    <div class="flex justify-center gap-6 mb-12">
+                        <button id="timer-toggle" onclick="toggleTimer()" class="btn-white px-10 py-4 rounded-full font-black text-lg shadow-2xl">Start Focus</button>
+                        <button onclick="resetTimer()" class="px-8 py-4 opacity-50 hover:opacity-100 font-bold transition">Reset</button>
+                    </div>
+
+                    <div class="flex justify-center gap-8 border-t border-white/10 pt-10">
+                        <button onclick="playAmbient('rain')" class="opacity-50 hover:opacity-100 transition flex flex-col items-center">
+                            <span class="text-3xl mb-1">🌧️</span>
+                            <span class="text-xs font-bold uppercase">Rain</span>
+                        </button>
+                        <button onclick="playAmbient('lofi')" class="opacity-50 hover:opacity-100 transition flex flex-col items-center">
+                            <span class="text-3xl mb-1">☕</span>
+                            <span class="text-xs font-bold uppercase">Lofi</span>
+                        </button>
+                        <audio id="ambient-player" loop></audio>
+                    </div>
+
+                    <!-- Fullscreen trigger -->
+                    <button onclick="toggleFocusMode()" class="absolute top-6 right-6 opacity-30 hover:opacity-100">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12a1 1 0 01-1-1zM3 12a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm9 1a1 1 0 011.414-1.414l2.293 2.293V13a1 1 0 012 0v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293z"></path></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TOOLS TAB -->
+            <section id="tools" class="tab-content hidden max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card p-8">
+                        <h2 class="font-black mb-6">Flashcard Master</h2>
+                        <div id="flashcard-container" onclick="flipCard()" class="h-48 bg-white/10 rounded-2xl flex items-center justify-center p-8 text-center cursor-pointer hover:bg-white/20 transition mb-6">
+                            <p id="card-text" class="text-xl font-medium">Add cards to study!</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <button onclick="prevCard()" class="flex-1 opacity-60 hover:opacity-100 transition">Back</button>
+                            <button onclick="nextCard()" class="flex-1 btn-white py-2 rounded-xl font-bold">Next</button>
+                        </div>
+                        <div class="mt-8 pt-8 border-t border-white/10 space-y-3">
+                            <input type="text" id="fc-front" placeholder="Question" class="w-full rounded-lg px-3 py-2">
+                            <input type="text" id="fc-back" placeholder="Answer" class="w-full rounded-lg px-3 py-2">
+                            <button onclick="addFlashcard()" class="w-full py-3 bg-white/20 rounded-lg hover:bg-white/30 font-bold transition">Add to Deck</button>
+                        </div>
+                    </div>
+
+                    <div class="card p-8">
+                        <h2 class="font-black mb-6">Quick Quiz</h2>
+                        <div id="quiz-area" class="min-h-[300px] flex flex-col justify-center">
+                            <p class="opacity-50 text-center">Your personalized quiz will appear here after adding flashcards.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-8 right-8 bg-white text-royal-blue px-8 py-5 rounded-2xl shadow-2xl transform translate-x-[150%] transition-transform duration-500 z-[10000] flex items-center gap-4">
+        <span id="toast-icon" class="text-2xl">⚡</span>
+        <span id="toast-message" class="font-bold">Focus initiated!</span>
+    </div>
+
+    <script>
+        // NAVIGATION
+        function startApp() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('app-interface').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tab).classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('tab-active', 'opacity-60');
+                if(el.innerText.toLowerCase().includes(tab)) el.classList.add('tab-active');
+                else el.classList.add('opacity-60');
+            });
+        }
+
+        // STATE
+        let subjects = ['AP History', 'Physics', 'Literature'];
+        let tasks = [];
+        let flashcards = [];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let timerSeconds = 1500;
+        let isRunning = false;
+        let timerInterval = null;
+
+        // SUBJECTS & TASKS
+        function renderSubjects() {
+            const list = document.getElementById('subject-list');
+            list.innerHTML = subjects.map(s => `
+                <div class="flex justify-between items-center bg-white/10 p-3 rounded-xl">
+                    <span class="font-bold text-sm">${s}</span>
+                    <button onclick="removeSubject('${s}')" class="opacity-30 hover:opacity-100">×</button>
+                </div>
+            `).join('');
+        }
+
+        function addSubject() {
+            const input = document.getElementById('subject-input');
+            if (input.value.trim() && !subjects.includes(input.value)) {
+                subjects.push(input.value.trim());
+                input.value = '';
+                renderSubjects();
+            }
+        }
+
+        function removeSubject(s) {
+            subjects = subjects.filter(sub => sub !== s);
+            renderSubjects();
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            if(tasks.length === 0) {
+                list.innerHTML = '<div class="text-center py-12 opacity-30 italic">No tasks active. Enjoy your freedom!</div>';
+                return;
+            }
+            list.innerHTML = tasks.map(t => `
+                <div class="flex items-center gap-4 p-5 card border-none bg-white/5">
+                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${t.id})" class="w-6 h-6 rounded-lg bg-transparent border-white/30 checked:bg-white accent-white">
+                    <span class="flex-1 font-medium ${t.done ? 'line-through opacity-30' : ''}">${t.text}</span>
+                    <button onclick="deleteTask(${t.id})" class="opacity-20 hover:opacity-100 transition">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            if(input.value.trim()) {
+                tasks.push({ id: Date.now(), text: input.value, done: false });
+                input.value = '';
+                renderTasks();
+            }
+        }
+
+        function toggleTask(id) {
+            const t = tasks.find(x => x.id === id);
+            if(t) t.done = !t.done;
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(x => x.id !== id);
+            renderTasks();
+        }
+
+        // TIMER
+        function format(s) {
+            return `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('timer-toggle');
+            if (isRunning) {
+                clearInterval(timerInterval);
+                btn.innerText = 'Resume Focus';
+            } else {
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    document.getElementById('timer-display').innerText = format(timerSeconds);
+                    if(timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        showToast("Session Complete!", "🎓");
+                    }
+                }, 1000);
+                btn.innerText = 'Pause Session';
+            }
+            isRunning = !isRunning;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timerSeconds = 1500;
+            document.getElementById('timer-display').innerText = '25:00';
+            document.getElementById('timer-toggle').innerText = 'Start Focus';
+        }
+
+        function toggleFocusMode() {
+            const el = document.getElementById('timer-container');
+            el.classList.toggle('focus-mode-active');
+            document.body.style.overflow = el.classList.contains('focus-mode-active') ? 'hidden' : 'auto';
+        }
+
+        // FLASHCARDS
+        function addFlashcard() {
+            const f = document.getElementById('fc-front');
+            const b = document.getElementById('fc-back');
+            if(f.value && b.value) {
+                flashcards.push({ q: f.value, a: b.value });
+                f.value = ''; b.value = '';
+                updateCard();
+            }
+        }
+
+        function updateCard() {
+            const el = document.getElementById('card-text');
+            if(flashcards.length === 0) return;
+            el.innerText = isFlipped ? flashcards[currentCardIndex].a : flashcards[currentCardIndex].q;
+            el.style.opacity = isFlipped ? '0.7' : '1';
+        }
+
+        function flipCard() { isFlipped = !isFlipped; updateCard(); }
+        function nextCard() { currentCardIndex = (currentCardIndex + 1) % flashcards.length; isFlipped = false; updateCard(); }
+        function prevCard() { currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length; isFlipped = false; updateCard(); }
+
+        // AUDIO & UI
+        function playAmbient(type) {
+            const audio = document.getElementById('ambient-player');
+            const src = type === 'rain' ? 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' : 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3';
+            if(audio.src === src && !audio.paused) audio.pause();
+            else { audio.src = src; audio.play().catch(()=>{}); }
+        }
+
+        function showToast(msg, icon) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+            t.classList.remove('translate-x-[150%]');
+            setTimeout(() => t.classList.add('translate-x-[150%]'), 4000);
+        }
+
+        window.onload = () => { renderSubjects(); renderTasks(); };
+    </script>
+</body>
+</html>\
