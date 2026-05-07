@@ -1,0 +1,1 @@
+Study Pro is an educational technology platform built to make studying simpler, faster, and more effective for students. Our platform combines smart study tools, personalized learning support, practice resources, and productivity features to help students stay organized and improve academic performance.
